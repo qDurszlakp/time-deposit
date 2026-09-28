@@ -9,5 +9,5 @@ CREATE TABLE IF NOT EXISTS withdrawals (
     id SERIAL PRIMARY KEY,
     time_deposit_id INTEGER NOT NULL REFERENCES time_deposits(id) ON DELETE CASCADE,
     amount NUMERIC(19, 2) NOT NULL,
-    withdrawal_date TIMESTAMPTZ NOT NULL
+    date TIMESTAMPTZ NOT NULL
 );

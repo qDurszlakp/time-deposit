@@ -10,7 +10,7 @@ INSERT INTO time_deposits (id, plan_type, days, balance) VALUES
 ON CONFLICT (id) DO NOTHING;
 
 -- Seed data for withdrawals
-INSERT INTO withdrawals (id, time_deposit_id, amount, withdrawal_date) VALUES
+INSERT INTO withdrawals (id, time_deposit_id, amount, date) VALUES
 (1, 2, 500.00, '2026-01-15T10:30:00Z'),
 (2, 2, 1000.00, '2026-02-10T14:00:00Z'),
 (3, 4, 250.00, '2026-03-01T09:15:00Z'),

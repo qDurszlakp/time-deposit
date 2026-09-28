@@ -35,13 +35,15 @@ class TimeDepositServiceTest {
     @Test
     @DisplayName("Should return all time deposits with withdrawals")
     void getAllTimeDeposits_delegatesToRepository() {
-
+        // given
         Withdrawal withdrawal = new Withdrawal(1, 2, BigDecimal.valueOf(500.00), Instant.parse("2026-01-15T10:30:00Z"));
         TimeDepositWithWithdrawals view = new TimeDepositWithWithdrawals(2, "basic", 1234567.00, 45, List.of(withdrawal));
         when(repositoryPort.findAllWithWithdrawals()).thenReturn(List.of(view));
 
+        // when
         List<TimeDepositWithWithdrawals> result = timeDepositService.getAllTimeDeposits();
 
+        // then
         assertThat(result).containsExactly(view);
         verify(repositoryPort).findAllWithWithdrawals();
     }
@@ -49,13 +51,15 @@ class TimeDepositServiceTest {
     @Test
     @DisplayName("Should calculate and save updated balances")
     void updateBalances_loadsCalculatesAndSaves() {
-        
+        // given
         TimeDeposit deposit = new TimeDeposit(2, "basic", 1234567.00, 45);
         List<TimeDeposit> deposits = List.of(deposit);
         when(repositoryPort.findAll()).thenReturn(deposits);
 
+        // when
         timeDepositService.updateBalances();
 
+        // then
         verify(repositoryPort).findAll();
         verify(calculator).updateBalance(deposits);
         verify(repositoryPort).saveAll(deposits);

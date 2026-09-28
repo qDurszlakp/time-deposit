@@ -70,3 +70,63 @@ A junior developer implemented domain logic for a time deposit system but did no
 ### Submission Instructions
 - Provide clear instructions on how to trigger the endpoints using the Swagger contract.
 - Email the link to your public GitHub repository.
+
+---
+
+## Solution Guide & AI Documentation
+
+### 1. How to Run the Application & Trigger Endpoints via Swagger
+
+#### Prerequisites
+- Java 17+ (or Docker / Podman)
+- Maven 3.9+ (or use Docker Compose)
+
+#### Option A: Running with Docker Compose (Recommended)
+From the repository root (`time-deposit/docker`):
+```bash
+docker compose -f docker/docker-compose.yml up --build -d
+```
+This spins up PostgreSQL 17 on port `5433` and the Spring Boot application on port `8080`.
+
+#### Option B: Running Locally with Maven
+1. Start PostgreSQL:
+   ```bash
+   docker compose -f docker/docker-compose.yml up -d postgres
+   ```
+2. Run the application:
+   ```bash
+   mvn spring-boot:run
+   ```
+
+#### Option C: Running Integration Tests (Testcontainers)
+All business flows and database round-trips can be verified independently without manual container setup:
+```bash
+mvn clean test
+```
+
+#### Triggering Endpoints via Swagger UI
+Once the application is running, navigate to:
+**[http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)** (or `http://localhost:8080/swagger-ui.html`)
+
+1. **`GET /api/v1/time-deposits`**:
+   - Expand the endpoint in Swagger UI.
+   - Click **Try it out** and then **Execute**.
+   - Inspect the 200 OK response returning all deposits with plan types, balances, days, and nested historical withdrawals.
+2. **`POST /api/v1/time-deposits/update-balances`**:
+   - Expand the endpoint in Swagger UI.
+   - Click **Try it out** and then **Execute**.
+   - Receives `"Balances updated"` status 200 OK.
+   - Re-run `GET /api/v1/time-deposits` to observe the interest applied according to plan business rules.
+
+---
+
+### 2. AI-Assisted Development Report (Section 6)
+
+#### Tools & Setup
+- **Coding Assistant / Framework:** Google DeepMind **Antigravity CLI** agentic pair programming harness running Gemini reasoning models.
+- **Workflow:** Conversational pair programming combining automated command execution (Maven builds, container orchestration, code edits) with iterative human guidance and reviews.
+
+#### Custom Rules & System Configuration (`GEMINI.md`)
+- **Strict conciseness:** Keeping explanations short and focused to maintain high engineering velocity.
+- **Strict Hexagonal Architecture:** Separation of domain models and logic from inbound/outbound ports, application use cases, and persistence/web adapters.
+- **Pure Dependency Injection:** No unnecessary `new` operators in Spring service components; constructor injection used exclusively.
