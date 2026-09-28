@@ -1,10 +1,6 @@
 package org.ikigaidigital.infrastructure.adapter.out.persistence;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -12,10 +8,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "time_deposits")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class TimeDepositEntity {
 
     @Id
@@ -34,4 +26,55 @@ public class TimeDepositEntity {
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "time_deposit_id")
     private List<WithdrawalEntity> withdrawals = new ArrayList<>();
+
+    public TimeDepositEntity() {
+    }
+
+    public TimeDepositEntity(Integer id, String planType, Integer days, BigDecimal balance, List<WithdrawalEntity> withdrawals) {
+        this.id = id;
+        this.planType = planType;
+        this.days = days;
+        this.balance = balance;
+        this.withdrawals = withdrawals != null ? withdrawals : new ArrayList<>();
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getPlanType() {
+        return planType;
+    }
+
+    public void setPlanType(String planType) {
+        this.planType = planType;
+    }
+
+    public Integer getDays() {
+        return days;
+    }
+
+    public void setDays(Integer days) {
+        this.days = days;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
+    public List<WithdrawalEntity> getWithdrawals() {
+        return withdrawals;
+    }
+
+    public void setWithdrawals(List<WithdrawalEntity> withdrawals) {
+        this.withdrawals = withdrawals;
+    }
 }

@@ -2,13 +2,10 @@ package org.ikigaidigital;
 
 import org.ikigaidigital.domain.model.PlanType;
 import org.ikigaidigital.domain.strategy.InterestCalculationStrategy;
-import org.springframework.stereotype.Component;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 
-@Component
 public class TimeDepositCalculator {
 
     private final List<InterestCalculationStrategy> strategies;

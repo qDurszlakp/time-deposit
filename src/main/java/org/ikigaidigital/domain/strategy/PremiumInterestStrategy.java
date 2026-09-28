@@ -2,12 +2,9 @@ package org.ikigaidigital.domain.strategy;
 
 import org.ikigaidigital.domain.model.PlanType;
 
-import org.springframework.stereotype.Component;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-@Component
 public class PremiumInterestStrategy implements InterestCalculationStrategy {
 
     private static final BigDecimal ANNUAL_RATE = BigDecimal.valueOf(0.05);

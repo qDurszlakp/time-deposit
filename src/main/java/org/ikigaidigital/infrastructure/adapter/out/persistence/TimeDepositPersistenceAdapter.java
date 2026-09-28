@@ -7,7 +7,6 @@ import org.ikigaidigital.domain.port.out.TimeDepositRepositoryPort;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -25,7 +24,6 @@ public class TimeDepositPersistenceAdapter implements TimeDepositRepositoryPort 
     @Override
     public List<TimeDepositWithWithdrawals> findAllWithWithdrawals() {
         return repository.findAll().stream()
-                .sorted(Comparator.comparing(TimeDepositEntity::getId))
                 .map(this::toView)
                 .toList();
     }
@@ -33,7 +31,6 @@ public class TimeDepositPersistenceAdapter implements TimeDepositRepositoryPort 
     @Override
     public List<TimeDeposit> findAll() {
         return repository.findAll().stream()
-                .sorted(Comparator.comparing(TimeDepositEntity::getId))
                 .map(this::toDomain)
                 .toList();
     }
@@ -61,7 +58,6 @@ public class TimeDepositPersistenceAdapter implements TimeDepositRepositoryPort 
     private TimeDepositWithWithdrawals toView(TimeDepositEntity entity) {
         List<Withdrawal> withdrawals = entity.getWithdrawals() != null
                 ? entity.getWithdrawals().stream()
-                .sorted(Comparator.comparing(WithdrawalEntity::getId))
                 .map(w -> new Withdrawal(w.getId(), w.getTimeDepositId(), w.getAmount(), w.getDate()))
                 .toList()
                 : List.of();

@@ -1,20 +1,12 @@
 package org.ikigaidigital.infrastructure.adapter.out.persistence;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 
 @Entity
 @Table(name = "withdrawals")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class WithdrawalEntity {
 
     @Id
@@ -29,4 +21,46 @@ public class WithdrawalEntity {
 
     @Column(name = "date", nullable = false)
     private Instant date;
+
+    public WithdrawalEntity() {
+    }
+
+    public WithdrawalEntity(Integer id, Integer timeDepositId, BigDecimal amount, Instant date) {
+        this.id = id;
+        this.timeDepositId = timeDepositId;
+        this.amount = amount;
+        this.date = date;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getTimeDepositId() {
+        return timeDepositId;
+    }
+
+    public void setTimeDepositId(Integer timeDepositId) {
+        this.timeDepositId = timeDepositId;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public Instant getDate() {
+        return date;
+    }
+
+    public void setDate(Instant date) {
+        this.date = date;
+    }
 }
