@@ -1,30 +1,45 @@
 package org.ikigaidigital;
 
+import org.ikigaidigital.domain.model.PlanType;
+import org.ikigaidigital.domain.strategy.InterestCalculationStrategy;
+import org.springframework.stereotype.Component;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 
+@Component
 public class TimeDepositCalculator {
-    public void updateBalance(List<TimeDeposit> xs) {
-        for (int i = 0; i < xs.size(); i++) {
-            double interest = 0;
 
-            if (xs.get(i).getDays() > 30) {
-                if (xs.get(i).getPlanType().equals("student")) {
-                    if (xs.get(i).getDays() < 366) {
-                        interest += xs.get(i).getBalance() * 0.03 / 12;
-                    }
-                } else if (xs.get(i).getPlanType().equals("premium")) {
-                    if (xs.get(i).getDays() > 45) {
-                        interest += xs.get(i).getBalance() * 0.05 / 12;
-                    }
-                } else if (xs.get(i).getPlanType().equals("basic")) {
-                    interest += xs.get(i).getBalance() * 0.01 / 12;
-                }
+    private final List<InterestCalculationStrategy> strategies;
+
+    public TimeDepositCalculator(List<InterestCalculationStrategy> strategies) {
+        this.strategies = strategies;
+    }
+
+    public void updateBalance(List<TimeDeposit> timeDeposits) {
+        if (timeDeposits.isEmpty()) {
+            return;
+        }
+
+        for (TimeDeposit deposit : timeDeposits) {
+            if (deposit == null || deposit.getBalance() == null) {
+                continue;
             }
 
-            double a2d = xs.get(i).getBalance() + (new BigDecimal(interest).setScale(2, RoundingMode.HALF_UP)).doubleValue();
-            xs.get(i).setBalance(a2d);
+            PlanType planType = PlanType.fromCode(deposit.getPlanType());
+            
+            InterestCalculationStrategy strategy = strategies.stream()
+                    .filter(s -> s.supportedPlan() == planType)
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException("No strategy found for plan: " + planType));
+
+            BigDecimal balance = BigDecimal.valueOf(deposit.getBalance());
+            BigDecimal interest = strategy.calculateMonthlyInterest(deposit.getDays(), balance);
+
+            BigDecimal newBalance = balance.add(interest).setScale(2, RoundingMode.HALF_UP);
+            deposit.setBalance(newBalance.doubleValue());
         }
     }
 }
+
